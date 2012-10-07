@@ -1,0 +1,14 @@
+{
+    "id": "google-app-engine-java-1.0",
+    "name": "Google App Engine Java Example",
+    "source": "git://github.com/CloudBees-community/google-app-engine-java-clickstart.git",
+    "description" : "Deploys a simple java application to Google App Engine. Note that the name above must match one of your Application IDs.",
+    "doc-url" : "https://github.com/CloudBees-community/google-app-engine-java-clickstart/blob/master/README.md",
+    "icon" : "https://raw.github.com/CloudBees-community/google-app-engine-java-clickstart/master/icon.png",
+    "disabled": true,
+    "build-with-jenkins": {
+        "template": {
+            "type": "https://raw.github.com/CloudBees-community/google-app-engine-java-clickstart/master/config.xml"
+        }
+    }
+}
