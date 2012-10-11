@@ -39,6 +39,11 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <version>6.1.10</version>
+      </plugin>
     </plugins>
     <finalName>Grenoble Traffic</finalName>
   </build>

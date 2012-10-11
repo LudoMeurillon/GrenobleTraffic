@@ -70,8 +70,8 @@
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <rootModule>
-    <groupId>com.cloudbees</groupId>
-    <artifactId>simple-webapp</artifactId>
+    <groupId>com.meurillon</groupId>
+    <artifactId>grenobletraffic</artifactId>
   </rootModule>
   <goals>clean install</goals>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
@@ -92,7 +92,7 @@
   <postbuilders>
     <com.cloudbees.jenkins.plugins.gaedeployer.GAEJavaDeployer>
       <javaName>Oracle JDK 1.7 (latest)</javaName>
-      <applicationDir>target/simple-webapp/</applicationDir>
+      <applicationDir>target/Grenoble Traffic/</applicationDir>
       <updateBackends>false</updateBackends>
       <applicationId>${applicationName}</applicationId>
       <applicationVersion>${JOB_NAME}-${BUILD_NUMBER}</applicationVersion>
