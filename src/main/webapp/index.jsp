@@ -24,6 +24,7 @@ body {
 </script>
 <script type="text/javascript">
 	var map;
+	var version = 1;
 	
 	function refreshTrafficStatus(trafficData){
 		console.log("content="+trafficData);
@@ -102,10 +103,34 @@ body {
 
 	function draw(troncons) {
 		troncons.features.forEach(storeTroncon);
+		/*
 		setTimeout(function(){
 			troncons.features.forEach(drawTroncon);
 		},1000);
-		setTimeout(startTrafficRefresh,2000);
+		*/
+		drawTraffic();
+	}
+	
+	function updateTroncons(){
+		localStorage.clear();
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4) {
+				if (xhr.status == 200) {
+					draw(JSON.parse(xhr.responseText));
+					localStorage["version"] = version;
+				} else {
+					window.alert("Error: returned status code " + xhr.status
+							+ " " + xhr.statusText);
+				}
+			}
+		};
+		xhr.open("GET", "troncons.json", true);
+		xhr.send(null);
+	}
+	
+	function drawTraffic(){
+		startTrafficRefresh();
 	}
 
 	function initialize() {
@@ -116,21 +141,15 @@ body {
 		};
 		map = new google.maps.Map(document.getElementById("map_canvas"),
 				mapOptions);
-
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == 4) {
-				if (xhr.status == 200) {
-					draw(JSON.parse(xhr.responseText));
-				} else {
-					window.alert("Error: returned status code " + xhr.status
-							+ " " + xhr.statusText);
-				}
-			}
-		};
-		xhr.open("GET", "troncons.json", true);
-		xhr.send(null);
-
+		var storedVersion = 0;
+		if(localStorage["version"]){
+			storedVersion = localStorage["version"];
+		}
+		if(version != storedVersion){
+			setTimeout(updateTroncons,200);
+		}else{
+			drawTraffic();
+		}
 	}
 </script>
 </head>
