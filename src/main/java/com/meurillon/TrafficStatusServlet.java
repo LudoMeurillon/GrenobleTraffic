@@ -19,7 +19,7 @@ public class TrafficStatusServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
-			int key = Double.valueOf(Math.random()*1000).intValue();
+			int key = Double.valueOf(Math.random()*1000000).intValue();
 			
             URL url = new URL("http://www.stationmobile.fr/stationmobilecore/XML/Carto/Dynamique/dynTroncons.json?key="+key);
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
