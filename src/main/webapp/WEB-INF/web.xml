@@ -6,6 +6,17 @@
             30
         </session-timeout>
     </session-config>
+    <servlet>
+   <display-name>traffic</display-name>
+   <servlet-name>traffic</servlet-name>
+   <servlet-class>com.meurillon.TrafficStatusServlet</servlet-class>
+   <load-on-startup>1</load-on-startup>
+ </servlet>
+ 
+ <servlet-mapping>
+   <servlet-name>traffic</servlet-name>
+   <url-pattern>/traffic</url-pattern>
+ </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
         </welcome-file-list>
