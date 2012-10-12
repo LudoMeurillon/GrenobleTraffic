@@ -32,11 +32,11 @@ body {
 			var color="#045FB4";
 			switch(feature.properties.NSV_ID){
 			case 1 :
-				color = "#088A08";break;
+				color = "#73BB02";break;
 			case 2 :
 				color = "#FFBF00";break;
 			case 3 :
-				color = "#DF0101";break;
+				color = "#DD1717";break;
 			}
 			doDrawTroncon(feature.properties.CODE,color,1.0, 3);
 		});
@@ -135,12 +135,15 @@ body {
 
 	function initialize() {
 		var mapOptions = {
-			center : new google.maps.LatLng(45.184166, 5.715542),
+			center : new google.maps.LatLng(45.182037,5.727654),
 			zoom : 13,
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		};
 		map = new google.maps.Map(document.getElementById("map_canvas"),
 				mapOptions);
+		var trafficLayer = new google.maps.TrafficLayer();
+		trafficLayer.setMap(map);
+		
 		var storedVersion = 0;
 		if(localStorage["version"]){
 			storedVersion = localStorage["version"];
