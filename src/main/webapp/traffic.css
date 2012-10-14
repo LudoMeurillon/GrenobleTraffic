@@ -42,3 +42,11 @@ body {
     font-weight: bold;
     border: 1px solid #678AC7;
 }
+
+#mapCanvas img { 
+  max-width: none;
+}
+
+#mapCanvas label { 
+  width: auto; display:inline; 
+} 

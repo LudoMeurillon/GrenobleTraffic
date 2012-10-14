@@ -138,7 +138,7 @@ function addControl(text, onclick){
 		controlUI.className = 'gmap-control gmap-control-active';
 		onclick();
 	});
-	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
+	map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(controlDiv);
 	return controlUI;
 }
 
@@ -147,9 +147,39 @@ function initialize() {
 		center : new google.maps.LatLng(45.182037,5.727654),
 		zoom : 13,
 		overviewMapControl : true,
-		mapTypeId : google.maps.MapTypeId.ROADMAP
-	};
-	map = new google.maps.Map(document.getElementById("map_canvas"),
+		mapTypeId : google.maps.MapTypeId.ROADMAP,
+		panControl: false,
+		streetViewControl: false,
+		mapTypeControlOptions: {
+		      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+		      position: google.maps.ControlPosition.RIGHT_CENTER
+	    },
+	    zoomControlOptions:{
+	    	position:google.maps.ControlPosition.LEFT_CENTER
+	    },
+		styles : [
+	      {
+	        stylers: [
+	          { hue: "#00aaff" },
+	          { saturation: -36 }
+	        ]
+	      },{
+	        featureType: "road",
+	        elementType: "geometry",
+	        stylers: [
+	          { lightness: 100 },
+	          { visibility: "simplified" }
+	        ]
+	      },{
+	        featureType: "road",
+	        elementType: "labels",
+	        stylers: [
+	          { visibility: "off" }
+	        ]
+	      }
+	    ]};
+
+	map = new google.maps.Map(document.getElementById("mapCanvas"),
 			mapOptions);
 
 	refreshDiv = addControl("Refresh",function(){
