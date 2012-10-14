@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>Grenoble Traffic - Map</title>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style"
@@ -26,13 +27,13 @@
 				<a class="brand" href="#">Grenoble Traffic</a>
 				<ul class="nav">
 					<li class="active"><a href="#">Traffic</a></li>
-					<li><a href="#">About</a></li>
+					<li><a href="about.jsp"><i class="icon-question-sign"></i></a></li>
 				</ul>
+				
+				
 			</div>
 		</div>
 	</div>
-<!-- 	<div class="container" style="height:100%;"> -->
-		<div id="mapCanvas" style="width: 100%; height: 100%;"></div>
-<!-- 	</div> -->
+	<div id="mapCanvas" style="width: 100%; height: 100%;"></div>
 </body>
 </html>
