@@ -21,17 +21,13 @@
 <script type="text/javascript" src="traffic.js"></script>
 </head>
 <body onload="initialize()">
-	<div class="navbar navbar-fixed-top">
+	<div class="container navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<div class="container">
-				<a class="brand" href="#">Grenoble Traffic</a>
-				<ul class="nav">
-					<li class="active"><a href="#">Traffic</a></li>
-					<li><a href="about.jsp"><i class="icon-question-sign"></i></a></li>
-				</ul>
-				
-				
-			</div>
+			<a class="brand" style="padding-left: 40px;" href="#">Grenoble Traffic</a>
+			<ul class="nav">
+				<li class="active"><a href="#">Traffic</a></li>
+				<li><a href="about.jsp"><i class="icon-question-sign"></i></a></li>
+			</ul>
 		</div>
 	</div>
 	<div id="mapCanvas" style="width: 100%; height: 100%;"></div>

@@ -49,4 +49,8 @@ body {
 
 #mapCanvas label { 
   width: auto; display:inline; 
-} 
+}
+
+#lastUpdateDate{
+	margin-bottom:25px;
+}

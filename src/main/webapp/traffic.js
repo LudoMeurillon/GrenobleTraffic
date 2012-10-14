@@ -4,10 +4,11 @@ var version = 1;
 var polylines = {}; 
 
 function refreshTrafficStatus(trafficData){
+	replaceText(trafficData.date);
 	trafficData.features.forEach(function(feature){
 		var color="#045FB4";
 		var lineSymbol;
-		var zIndex = 10;
+		var zIndex;
 		switch(feature.properties.NSV_ID){
 		case 1 :
 			color = "#73BB02";break;
@@ -26,7 +27,7 @@ function refreshTrafficStatus(trafficData){
 			zIndex = 10;
 			break;
 		}
-		drawTroncon(feature.properties.CODE,color, 0.7, 3, lineSymbol, zIndex);
+		drawTroncon(feature.properties.CODE,color, 0.7, 4, lineSymbol, zIndex);
 	});
 	if(refreshDiv){
 		refreshDiv.className='gmap-control';
@@ -50,6 +51,7 @@ function drawTroncon(code, color, opacity, weight, lineSymbol, lineZIndex){
 			path : coords,
 			strokeColor : color,
 			strokeOpacity : opacity,
+			strokeWeight : weight,
 			zIndex : lineZIndex,
 			strokeWeight : weight
 		});
@@ -138,24 +140,33 @@ function addControl(text, onclick){
 		controlUI.className = 'gmap-control gmap-control-active';
 		onclick();
 	});
-	map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(controlDiv);
+	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
 	return controlUI;
+}
+
+function replaceText(text){
+	map.controls[google.maps.ControlPosition.BOTTOM_CENTER].clear();
+	var badge = document.createElement('span');
+	badge.id="lastUpdateDate";
+	badge.className= 'badge badge-info';
+	badge.innerText = text;
+	map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(badge);
 }
 
 function initialize() {
 	var mapOptions = {
 		center : new google.maps.LatLng(45.182037,5.727654),
 		zoom : 13,
-		overviewMapControl : true,
+		overviewMapControl : false,
 		mapTypeId : google.maps.MapTypeId.ROADMAP,
 		panControl: false,
 		streetViewControl: false,
+		mapTypeControl:false,
 		mapTypeControlOptions: {
-		      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-		      position: google.maps.ControlPosition.RIGHT_CENTER
+		      position: google.maps.ControlPosition.RIGHT_BOTTOM
 	    },
 	    zoomControlOptions:{
-	    	position:google.maps.ControlPosition.LEFT_CENTER
+	    	position:google.maps.ControlPosition.RIGHT_CENTER
 	    },
 		styles : [
 	      {
