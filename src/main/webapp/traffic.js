@@ -203,6 +203,7 @@ function setPosition(position){
 	map.panTo(currentPosition);
 	marker = new google.maps.Marker({
           map:map,
+          icon:new google.maps.MarkerImage("marker.png", new google.maps.Size(20,28)),
           draggable:false,
           animation: google.maps.Animation.DROP,
           position: currentPosition
