@@ -3,7 +3,7 @@ var refreshDiv;
 var switchThemeDiv;
 var version = 1;
 var polylines = {}; 
-var currentTheme = "b&w";
+var currentTheme;
 
 function refreshTrafficStatus(trafficData){
 	replaceText(trafficData.date);
@@ -111,12 +111,14 @@ function fetchTroncons(){
 	xhr.send(null);
 }
 
-function addControl(text, onclick){
+function addControl(icon, onclick){
 	var controlDiv = document.createElement('DIV');
 	controlDiv.className="gmap-control-container gmnoprint";
 	var controlUI = document.createElement('DIV');
 	controlUI.className= 'gmap-control';
-	controlUI.innerText = text;
+	var iconDiv = document.createElement('i');
+	iconDiv.className= 'icon icon-'+icon;
+	controlUI.appendChild(iconDiv);
 	controlDiv.appendChild(controlUI);
 	google.maps.event.addDomListener(controlUI, 'click', function() {
 		controlUI.className = 'gmap-control gmap-control-active';
@@ -136,15 +138,17 @@ function replaceText(text){
 }
 
 function switchTheme(){
-	var saturationValue = -100;
+	var saturationValue;
 	switch(currentTheme){
 	case "b&w":
 		saturationValue = 0;
 		currentTheme = "color";
+		switchThemeDiv.className= 'gmap-control';
 		break;
 	default:
+		saturationValue = -100;
 		currentTheme = "b&w";	
-		switchThemeDiv.className= 'gmap-control';
+		switchThemeDiv.className='gmap-control gmap-control-active';
 	}
 	map.setOptions({styles : [{stylers: [{saturation: saturationValue }]}]});
 }
@@ -173,8 +177,10 @@ function initialize() {
 	    ]};
 
 	map = new google.maps.Map(document.getElementById("mapCanvas"), mapOptions);
-	refreshDiv 		= addControl("Refresh",fetchTrafficInfos);
-	switchThemeDiv 	= addControl("Color", switchTheme);
+
+	refreshDiv 		= addControl("refresh", fetchTrafficInfos);
+	switchThemeDiv 	= addControl("adjust", switchTheme);
+	switchTheme();
 	
 	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(setPosition, onPositionError);
@@ -182,11 +188,9 @@ function initialize() {
 	  console.log("No support for geolocation on this device");
 	}
 	
-	var storedVersion = 0;
-	if(localStorage["version"]){
-		storedVersion = localStorage["version"];
-	}
+	var storedVersion = localStorage["version"];
 	if(version != storedVersion){
+		console.log("refreshing local data with new troncons from server");
 		setTimeout(fetchTroncons,200);
 	}else{
 		fetchTrafficInfos();
