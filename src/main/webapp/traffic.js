@@ -1,18 +1,15 @@
-var map;
-var refreshDiv;
-var switchThemeDiv;
-var version = 1;
-var polylines = {}; 
-var currentTheme;
+var GrenobleTraffic = {};
+GrenobleTraffic.version = 1;
+GrenobleTraffic.polylines = {};
 
-function refreshTrafficStatus(trafficData){
-	replaceText(trafficData.date);
+GrenobleTraffic.refreshTrafficStatus = function(trafficData){
+	GrenobleTraffic.replaceText(trafficData.date);
 	trafficData.features.forEach(function(feature){
 		var color="#045FB4";
 		var zIndex;
 		switch(feature.properties.NSV_ID){
 		case 1 :
-			color = "#73BB02";break;
+			color = "#73BB02";
 			zIndex = 100;
 			break;
 		case 2 :
@@ -28,15 +25,15 @@ function refreshTrafficStatus(trafficData){
 			zIndex = 10;
 			break;
 		}
-		drawTroncon(feature.properties.CODE,color, 0.7, 4, zIndex);
+		GrenobleTraffic.drawTroncon(feature.properties.CODE,color, 0.7, 4, zIndex);
 	});
-	if(refreshDiv){
-		refreshDiv.className='gmap-control';
+	if(GrenobleTraffic.refreshDiv){
+		GrenobleTraffic.refreshDiv.className='gmap-control';
 	}
 }
 
-function drawTroncon(code, color, opacity, weight, lineZIndex){
-	var coords = loadCoords(code);
+GrenobleTraffic.drawTroncon = function(code, color, opacity, weight, lineZIndex){
+	var coords = GrenobleTraffic.loadCoords(code);
 	var result = new google.maps.Polyline({
 		path : coords,
 		strokeColor : color,
@@ -45,20 +42,20 @@ function drawTroncon(code, color, opacity, weight, lineZIndex){
 		zIndex : lineZIndex,
 		strokeWeight : weight
 	});
-	if(polylines[code]){
+	if(GrenobleTraffic.polylines[code]){
 		//remove polyline from google map
-		polylines[code].setMap(null);
+		GrenobleTraffic.polylines[code].setMap(null);
 	}
-	polylines[code] = result;
-	result.setMap(map);
+	GrenobleTraffic.polylines[code] = result;
+	result.setMap(GrenobleTraffic.map);
 }
 
-function fetchTrafficInfos(){
+GrenobleTraffic.fetchTrafficInfos = function(){
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
-				refreshTrafficStatus(JSON.parse(xhr.responseText));
+				GrenobleTraffic.refreshTrafficStatus(JSON.parse(xhr.responseText));
 			} else {
 				console.log("Error: returned status code " + xhr.status + " " + xhr.statusText);
 			}
@@ -68,7 +65,7 @@ function fetchTrafficInfos(){
 	xhr.send(null);
 }
 
-function loadCoords(code){
+GrenobleTraffic.loadCoords = function(code){
 	var points = [];
 	var i =0;
 	var coordinatesAsString = localStorage[code];
@@ -83,25 +80,25 @@ function loadCoords(code){
 	return points;
 }
 
-function storeTroncon(troncon){
+GrenobleTraffic.storeTroncon = function(troncon){
 	var code = troncon.properties.CODE;
 	var coordinates = troncon.geometry.coordinates[0];
 	localStorage[code]=JSON.stringify(coordinates);
 }
 
-function refreshTroncons(troncons) {
-	localStorage["version"] = version;
-	troncons.features.forEach(storeTroncon);
-	fetchTrafficInfos();
+GrenobleTraffic.refreshTroncons = function(troncons) {
+	localStorage["version"] = GrenobleTraffic.version;
+	troncons.features.forEach(GrenobleTraffic.storeTroncon);
+	GrenobleTraffic.fetchTrafficInfos();
 }
 
-function fetchTroncons(){
+GrenobleTraffic.fetchTroncons = function(){
 	localStorage.clear();
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
-				refreshTroncons(JSON.parse(xhr.responseText));
+				GrenobleTraffic.refreshTroncons(JSON.parse(xhr.responseText));
 			} else {
 				console.log("Error: returned status code " + xhr.status+ " " + xhr.statusText);
 			}
@@ -111,7 +108,7 @@ function fetchTroncons(){
 	xhr.send(null);
 }
 
-function addControl(icon, onclick){
+GrenobleTraffic.addControl = function(icon, onclick){
 	var controlDiv = document.createElement('DIV');
 	controlDiv.className="gmap-control-container gmnoprint";
 	var controlUI = document.createElement('DIV');
@@ -124,36 +121,36 @@ function addControl(icon, onclick){
 		controlUI.className = 'gmap-control gmap-control-active';
 		onclick();
 	});
-	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
+	GrenobleTraffic.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
 	return controlUI;
 }
 
-function replaceText(text){
-	map.controls[google.maps.ControlPosition.BOTTOM_CENTER].clear();
+GrenobleTraffic.replaceText = function(text){
+	GrenobleTraffic.map.controls[google.maps.ControlPosition.BOTTOM_CENTER].clear();
 	var badge = document.createElement('span');
 	badge.id="lastUpdateDate";
 	badge.className= 'badge badge-info';
 	badge.innerText = text;
-	map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(badge);
+	GrenobleTraffic.map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(badge);
 }
 
-function switchTheme(){
+GrenobleTraffic.switchTheme = function(){
 	var saturationValue;
-	switch(currentTheme){
+	switch(GrenobleTraffic.currentTheme){
 	case "b&w":
 		saturationValue = 0;
-		currentTheme = "color";
-		switchThemeDiv.className= 'gmap-control';
+		GrenobleTraffic.currentTheme = "color";
+		GrenobleTraffic.switchThemeDiv.className= 'gmap-control';
 		break;
 	default:
 		saturationValue = -100;
-		currentTheme = "b&w";	
-		switchThemeDiv.className='gmap-control gmap-control-active';
+		GrenobleTraffic.currentTheme = "b&w";	
+		GrenobleTraffic.switchThemeDiv.className='gmap-control gmap-control-active';
 	}
-	map.setOptions({styles : [{stylers: [{saturation: saturationValue }]}]});
+	GrenobleTraffic.map.setOptions({styles : [{stylers: [{saturation: saturationValue }]}]});
 }
 
-function initialize() {
+GrenobleTraffic.start = function() {
 	var mapOptions = {
 		center : new google.maps.LatLng(45.182037,5.727654),
 		zoom : 13,
@@ -167,41 +164,34 @@ function initialize() {
 	    },
 	    zoomControlOptions:{
 	    	position:google.maps.ControlPosition.RIGHT_CENTER
-	    },
-		styles : [
-	      {
-	        stylers: [
-	          { saturation: -100 }
-	        ]
-	      }
-	    ]};
+	    }
+	};
 
-	map = new google.maps.Map(document.getElementById("mapCanvas"), mapOptions);
-
-	refreshDiv 		= addControl("refresh", fetchTrafficInfos);
-	switchThemeDiv 	= addControl("adjust", switchTheme);
-	switchTheme();
+	GrenobleTraffic.map = new google.maps.Map(document.getElementById("mapCanvas"), mapOptions);
+	GrenobleTraffic.refreshDiv 		= GrenobleTraffic.addControl("refresh", GrenobleTraffic.fetchTrafficInfos);
+	GrenobleTraffic.switchThemeDiv 	= GrenobleTraffic.addControl("adjust", GrenobleTraffic.switchTheme);
+	GrenobleTraffic.switchTheme();
 	
 	if(navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(setPosition, onPositionError);
+		navigator.geolocation.getCurrentPosition(GrenobleTraffic.setPosition, GrenobleTraffic.onPositionError);
 	} else {
-	  console.log("No support for geolocation on this device");
+	    console.log("No support for geolocation on this device");
 	}
 	
 	var storedVersion = localStorage["version"];
-	if(version != storedVersion){
+	if(GrenobleTraffic.version != storedVersion){
 		console.log("refreshing local data with new troncons from server");
-		setTimeout(fetchTroncons,200);
+		setTimeout(GrenobleTraffic.fetchTroncons,200);
 	}else{
-		fetchTrafficInfos();
+		GrenobleTraffic.fetchTrafficInfos();
 	}
 }
 
-function setPosition(position){
+GrenobleTraffic.setPosition = function(position){
 	var currentPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
-	map.panTo(currentPosition);
+	GrenobleTraffic.map.panTo(currentPosition);
 	marker = new google.maps.Marker({
-          map:map,
+          map: GrenobleTraffic.map,
           icon:new google.maps.MarkerImage("marker.png", new google.maps.Size(20,28)),
           draggable:false,
           animation: google.maps.Animation.DROP,
@@ -209,7 +199,7 @@ function setPosition(position){
     });
 }
 
-function onPositionError(error) {
+GrenobleTraffic.onPositionError = function(error) {
     var info = "Error geolocating user : ";
     switch(error.code) {
 	    case error.TIMEOUT:
