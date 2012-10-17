@@ -41,7 +41,7 @@ GrenobleTraffic.stationmobile.fetchTroncons = function(){
 	GrenobleTraffic.common.getJson(GrenobleTraffic.tronconsJsonFile, function(json){
 		localStorage["version"] = GrenobleTraffic.version;
 		localStorage[GrenobleTraffic.tronconsJsonFile] = JSON.stringify(json);
-		GrenobleTraffic.fetchTrafficInfos();
+		GrenobleTraffic.stationmobile.fetchTrafficInfos();
 	})
 }
 
